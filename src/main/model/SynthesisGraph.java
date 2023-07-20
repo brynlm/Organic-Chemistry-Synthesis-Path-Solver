@@ -8,8 +8,9 @@ import java.util.List;
 // contains methods for adding FunctionalGroup objects to the SynthesisGraph,
 // and for finding synthetic routes connecting two functional groups.
 public class SynthesisGraph {
-    private final String title;
-    private final List<FunctionalGroup> funcGroups;
+    private String title;
+    private List<FunctionalGroup> funcGroups;
+    private List<String> result;
 
     /* EFFECTS: initializes SynthesisGraph object.
        sets title field to title, and
@@ -41,11 +42,15 @@ public class SynthesisGraph {
     public List<String> searchFG(FunctionalGroup f, String end, List<String> todo,
                                  List<String> path, List<String> visited,
                                  List<List<String>> pathwl) {
+
         if (f.getName() == end) { // did you find it?
 //            visited.add(f.getName());
 //            visited.add(end);
+
             path.add(end);
-            return path; // yes? then return the path
+            this.result = path;
+            return this.result;
+            //return path; // yes? then return the path
 
         } else if (visited.contains(f.getName())) { // no? then check if already visited
 
@@ -70,7 +75,9 @@ public class SynthesisGraph {
         path.add(end); // <<--- Adding this fixed the problem, for some reason even though this
         // is including in the termination condition, it doesn't execute? Maybe they are talking about
         // two different "path" objects?
-        return path;
+
+        //return path;
+        return this.result;
     }
 
     public boolean searchPaths(String end, List<String> todo, List<String> path,
@@ -130,6 +137,10 @@ public class SynthesisGraph {
 
     public List<FunctionalGroup> getGroups() {
         return this.funcGroups;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
 }
