@@ -55,6 +55,14 @@ public class SynthesisGraphTest {
         assertEquals(testList, pathTest);
     }
 
+    @Test public void findPathwayTestStep2() {
+        List<String> pathTest = testGraph.findPathway("a0", "b0");
+        List<String> testList = new ArrayList<>();
+        testList.add("a0");
+        testList.add("b0");
+        assertEquals(testList, pathTest);
+    }
+
     @Test
     public void findPathwayTest() {
         // End point is first encountered node
@@ -69,6 +77,18 @@ public class SynthesisGraphTest {
     public void copyListTest() {
         List<List<String>> copyTest = testGraph.copyList(a0.getPathways().size(), a0.getPathways());
         assertEquals(3, copyTest.size());
+    }
+
+    @Test
+    public void getShortestTest() {
+        List<List<String>> test = new ArrayList<>();
+        test.add(testGraph.getGroupByName("a0").getPathways());
+        test.add(testGraph.getGroupByName("a1").getPathways());
+        test.add(testGraph.getGroupByName("a2").getPathways());
+        test.add(testGraph.getGroupByName("b0").getPathways());
+        test.add(testGraph.getGroupByName("b1").getPathways());
+        List<String> shortest = testGraph.getShortest(test);
+        assertEquals(testGraph.getGroupByName("b0").getPathways(), shortest);
     }
 
 

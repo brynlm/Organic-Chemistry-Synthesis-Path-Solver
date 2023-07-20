@@ -10,7 +10,7 @@ import java.util.List;
 public class SynthesisGraph {
     private String title;
     private List<FunctionalGroup> funcGroups;
-    private List<String> result;
+    private List<List<String>> result;
 
     /* EFFECTS: initializes SynthesisGraph object.
        sets title field to title, and
@@ -18,10 +18,12 @@ public class SynthesisGraph {
     public SynthesisGraph(String title) {
         this.title = title;
         this.funcGroups = new ArrayList<>();
+        this.result = new ArrayList<>();
     }
 
     // REQUIRES: funcGroups list contains objects with names matching the arguments.
     public List<String> findPathway(String f1, String f2) {
+        this.result = new ArrayList<>();
         List<String> todo = new ArrayList<>();
         List<String> path = new ArrayList<>();
         List<String> visited = new ArrayList<>();
@@ -44,53 +46,39 @@ public class SynthesisGraph {
                                  List<List<String>> pathwl) {
 
         if (f.getName() == end) { // did you find it?
-//            visited.add(f.getName());
-//            visited.add(end);
-
             path.add(end);
-            this.result = path;
-            return this.result;
-            //return path; // yes? then return the path
+            this.result.add(path);
+
+            if (pathwl.size() != 0) {
+                int index1 = todo.size() - 1;
+                int index2 = pathwl.size() - 1;
+//                String f1 = todo.get(index1);
+                path = pathwl.get(index2);
+                visited = copyList(1, path).get(0);
+                searchPaths(end, todo, path, visited, pathwl);
+            }
 
         } else if (visited.contains(f.getName())) { // no? then check if already visited
-
             //yes? then continue through unsearched paths
-
-//            int last = pathwl.size() - 1;
-//            path = pathwl.get(last);
-//            pathwl.remove(last);
             searchPaths(end, todo, path, visited, pathwl); // "take one off the top (path-wl)"
 
         } else { //no? then add to visited and add same-level paths to to-do list. Copy visited by # nodes add to pathwl
-//            int size = f.getPathways().size() - 1;
             int size = f.getPathways().size();
             todo.addAll(f.getPathways());
             path.add(f.getName());
             visited.add(f.getName());
             pathwl.addAll(copyList(size, path));
-
             searchPaths(end, todo, path, visited, pathwl);
         }
 
-        path.add(end); // <<--- Adding this fixed the problem, for some reason even though this
-        // is including in the termination condition, it doesn't execute? Maybe they are talking about
-        // two different "path" objects?
-
-        //return path;
-        return this.result;
+        return getShortest(this.result);
     }
 
-    public boolean searchPaths(String end, List<String> todo, List<String> path,
+    public List<String> searchPaths(String end, List<String> todo, List<String> path,
                                List<String> visited, List<List<String>> pathwl) {
 
-        if (todo.size() == 0) { // reached a dead end?
-            if (pathwl.size() == 0) {
-                return false;
-            } else { // this case shouldn't happen if to-do and path work in tandem
-                int index = pathwl.size() - 1;
-                List<String> nextPath = pathwl.get(index);
-                pathwl.remove(index);
-            }
+        if (pathwl.size() == 0 && todo.size() == 0) { // reached a dead end?
+            return getShortest(this.result);
         } else {
             int index1 = todo.size() - 1;
             int index2 = pathwl.size() - 1;
@@ -101,8 +89,18 @@ public class SynthesisGraph {
             searchFG(getGroupByName(f), end, todo, path, visited, pathwl);
         }
 
-//        return true; return void?
-        return false;
+        return getShortest(this.result);
+    }
+
+    public List<String> getShortest(List<List<String>> result) {
+        List<String> shortest = result.get(0);
+
+        for (List<String> los : result) {
+            if (shortest.size() > los.size()) {
+                shortest = los;
+            }
+        }
+        return shortest;
     }
 
     public FunctionalGroup getGroupByName(String name) {
