@@ -32,3 +32,5 @@ As a user, I want to be able to:
   product to the final one.
 - Add chemical groups / reaction paths to the existing graph. 
 - View graphical data such as child nodes of a specific chemical group.
+- have the option of *saving* added graph data to file
+- have the option of *loading* graph data from file and resume at a later time
