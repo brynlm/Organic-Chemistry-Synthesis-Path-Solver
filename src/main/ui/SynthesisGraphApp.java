@@ -1,15 +1,23 @@
 package ui;
 
+import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
-
 import model.FunctionalGroup;
 import model.SynthesisGraph;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
 public class SynthesisGraphApp {
     private SynthesisGraph graph;
     private Scanner input;
+    private static final String JSON_STORE = "./data/synthesisgraph.json";
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
-    public SynthesisGraphApp() {
+    public SynthesisGraphApp() throws FileNotFoundException {
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE); //refactor to support saving/loading different multiple different files
         runGraphApp();
     }
 
@@ -41,8 +49,12 @@ public class SynthesisGraphApp {
             doAddGroups();
         } else if (command.equals("p")) {
             doAddPaths();
-        } else if (command.equals("s")) {
+        } else if (command.equals("f")) {
             doSolveRoute();
+        } else if (command.equals("s")) {
+            saveGraph();
+        } else if (command.equals("o")) {
+            loadGraph();
         } else {
             System.out.println("Selection not valid...");
         }
@@ -67,26 +79,31 @@ public class SynthesisGraphApp {
         last = graph.getGroups().get(i).getName();
         System.out.println("\n" + graph.findPathway(start, last).toString());
     }
-    
+
+    // need to refactor to meet max line criteria
     private void doAddPaths() {
         int i;
         String command = null;
         FunctionalGroup node;
         boolean keepAdding = true;
-        System.out.println("select which group to modify (0-" + Integer.toString(graph.getGroups().size()) + "):");
+        System.out.println("select which group to modify (0-" + Integer.toString(graph.getGroups().size() - 1) + "):");
         for (i = 0; i < graph.getGroups().size(); i++) {
             System.out.println("\t" + Integer.toString(i) + ". " + graph.getGroups().get(i).getName());
         }
         command = input.next();
-        node = graph.getGroups().get(Integer.parseInt(command));
-        while (keepAdding) {
-            System.out.println("select which paths to add to " + node.getName() + ", or q to quit");
-            command = input.next();
-            if (command.equals("q")) {
-                keepAdding = false;
-            } else {
-                i = Integer.parseInt(command);
-                node.addPathway(graph.getGroups().get(i).getName());
+        if (command == "q") {
+            return;
+        } else {
+            node = graph.getGroups().get(Integer.parseInt(command));
+            while (keepAdding) {
+                System.out.println("select which paths to add to " + node.getName() + ", or q to quit");
+                command = input.next();
+                if (command.equals("q")) {
+                    keepAdding = false;
+                } else {
+                    i = Integer.parseInt(command);
+                    node.addPathway(graph.getGroups().get(i).getName());
+                }
             }
         }
     }
@@ -113,6 +130,29 @@ public class SynthesisGraphApp {
 
     }
 
+    private void saveGraph() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(graph);
+            jsonWriter.close();
+            System.out.println("Saved " + graph.getTitle() + " to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads workroom from file
+    private void loadGraph() {
+        try {
+            graph = jsonReader.read();
+            System.out.println("Loaded " + graph.getTitle() + " from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
+    }
+
+
     private void init() {
         graph = new SynthesisGraph("new_graph");
         input = new Scanner(System.in);
@@ -126,7 +166,9 @@ public class SynthesisGraphApp {
         System.out.println("\tr -> rename");
         System.out.println("\tg -> add functional group");
         System.out.println("\tp -> add paths to group");
-        System.out.println("\ts -> solve route");
+        System.out.println("\tf -> solve route");
+        System.out.println("\ts -> save graph");
+        System.out.println("\to -> load graph from file");
         System.out.println("\tq -> quit");
     }
 }

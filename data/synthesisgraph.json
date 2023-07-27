@@ -1,0 +1,17 @@
+{
+    "title": "TestWrite",
+    "funcGroups": [
+        {
+            "paths": ["b"],
+            "name": "a"
+        },
+        {
+            "paths": ["c"],
+            "name": "b"
+        },
+        {
+            "paths": [],
+            "name": "c"
+        }
+    ]
+}

@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONObject;
+import org.json.JSONArray;
 
 // represents a functional group that forms a unique node on the SynthesisGraph.
 // has fields defining the name and list of connected child nodes.
@@ -30,5 +32,12 @@ public class FunctionalGroup {
         this.pathways.add(product);
     }
 
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        JSONArray jsonArray = new JSONArray(this.pathways);
+        json.put("name", this.name);
+        json.put("paths", jsonArray);
+        return json;
+    }
 
 }

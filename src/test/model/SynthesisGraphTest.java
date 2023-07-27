@@ -33,7 +33,11 @@ public class SynthesisGraphTest {
 
     @Test
     public void getGroupByNameTest() {
-        assertEquals(b0, testGraph.getGroupByName("b0"));
+        try {
+            assertEquals(b0, testGraph.getGroupByName("b0"));
+        } catch (SynthesisGraph.NoMatchingGroup e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
@@ -82,13 +86,37 @@ public class SynthesisGraphTest {
     @Test
     public void getShortestTest() {
         List<List<String>> test = new ArrayList<>();
-        test.add(testGraph.getGroupByName("a0").getPathways());
-        test.add(testGraph.getGroupByName("a1").getPathways());
-        test.add(testGraph.getGroupByName("a2").getPathways());
-        test.add(testGraph.getGroupByName("b0").getPathways());
-        test.add(testGraph.getGroupByName("b1").getPathways());
+        try {
+            test.add(testGraph.getGroupByName("a0").getPathways());
+        } catch (SynthesisGraph.NoMatchingGroup e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            test.add(testGraph.getGroupByName("a1").getPathways());
+        } catch (SynthesisGraph.NoMatchingGroup e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            test.add(testGraph.getGroupByName("a2").getPathways());
+        } catch (SynthesisGraph.NoMatchingGroup e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            test.add(testGraph.getGroupByName("b0").getPathways());
+        } catch (SynthesisGraph.NoMatchingGroup e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            test.add(testGraph.getGroupByName("b1").getPathways());
+        } catch (SynthesisGraph.NoMatchingGroup e) {
+            throw new RuntimeException(e);
+        }
         List<String> shortest = testGraph.getShortest(test);
-        assertEquals(testGraph.getGroupByName("b0").getPathways(), shortest);
+        try {
+            assertEquals(testGraph.getGroupByName("b0").getPathways(), shortest);
+        } catch (SynthesisGraph.NoMatchingGroup e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

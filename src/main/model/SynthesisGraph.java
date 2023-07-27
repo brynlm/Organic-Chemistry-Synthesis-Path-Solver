@@ -1,8 +1,9 @@
 package model;
 
-
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 // keeps record of FunctionalGroup objects comprising the graph.
 // contains methods for adding FunctionalGroup objects to the SynthesisGraph,
@@ -34,21 +35,26 @@ public class SynthesisGraph {
         // find way to record and return visited path; then
         //  search for shortest route
 
-        List<String> pathway = searchFG(getGroupByName(f1), f2, todo, path, visited, pathwl);
+        try {
+            List<String> pathway = searchFG(getGroupByName(f1), f2, todo, path, visited, pathwl);
+            return pathway;
+        } catch (NoMatchingGroup err) {
+            System.out.println("no groups with those names!");
+        }
 
 
-        return pathway; //stub
+        return path; //stub
     }
 
 
     public List<String> searchFG(FunctionalGroup f, String end, List<String> todo,
                                  List<String> path, List<String> visited,
                                  List<List<String>> pathwl) {
-
-        if (f.getName() == end) { // did you find it?
+//        List<List<String>> result = new ArrayList<>(); // REFACTOR TEST
+        if (f.getName().equals(end)) { // did you find it?
             path.add(end);
             this.result.add(path);
-
+//            result.add(path);
             if (pathwl.size() != 0) {
                 int index1 = todo.size() - 1;
                 int index2 = pathwl.size() - 1;
@@ -56,8 +62,9 @@ public class SynthesisGraph {
                 path = pathwl.get(index2);
                 visited = copyList(1, path).get(0);
                 searchPaths(end, todo, path, visited, pathwl);
+            } else {
+                return getShortest(result);
             }
-
         } else if (visited.contains(f.getName())) { // no? then check if already visited
             //yes? then continue through unsearched paths
             searchPaths(end, todo, path, visited, pathwl); // "take one off the top (path-wl)"
@@ -72,6 +79,7 @@ public class SynthesisGraph {
         }
 
         return getShortest(this.result);
+//        return getShortest(result);
     }
 
     public List<String> searchPaths(String end, List<String> todo, List<String> path,
@@ -86,7 +94,11 @@ public class SynthesisGraph {
             path = pathwl.get(index2);
             todo.remove(index1);   // "take one off the top (to-do)"
             pathwl.remove(index2);
-            searchFG(getGroupByName(f), end, todo, path, visited, pathwl);
+            try {
+                searchFG(getGroupByName(f), end, todo, path, visited, pathwl);
+            } catch (NoMatchingGroup err) {
+                System.out.println("No groups found with that name!");
+            }
         }
 
         return getShortest(this.result);
@@ -103,14 +115,20 @@ public class SynthesisGraph {
         return shortest;
     }
 
-    public FunctionalGroup getGroupByName(String name) {
+    public FunctionalGroup getGroupByName(String name) throws NoMatchingGroup {
         for (FunctionalGroup f : this.funcGroups) {
-            if (f.getName() == name) {
+            if (f.getName().equals(name)) {
                 return f;
             }
         }
-        return null;
+        throw new NoMatchingGroup();
     }
+
+    class NoMatchingGroup extends Exception {
+        public NoMatchingGroup() {
+        }
+    }
+
 
     // returns a list of identical list objects. n is number of copies made
     public List<List<String>> copyList(int n, List<String> visited) {
@@ -141,4 +159,22 @@ public class SynthesisGraph {
         this.title = title;
     }
 
+    public String getTitle() {
+        return this.title;
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("title", this.title);
+        json.put("funcGroups", groupsToJson());
+        return json;
+    }
+
+    private JSONArray groupsToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (FunctionalGroup f : this.funcGroups) {
+            jsonArray.put(f.toJson());
+        }
+        return jsonArray;
+    }
 }
