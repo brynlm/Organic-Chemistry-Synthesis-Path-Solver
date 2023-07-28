@@ -120,7 +120,7 @@ public class SynthesisGraphTest {
     }
 
 
-    @SuppressWarnings("CheckStyle")
+    @SuppressWarnings("methodLength")
     public void init() {
         testGraph = new SynthesisGraph("testGraph");
 

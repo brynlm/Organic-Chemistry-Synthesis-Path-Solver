@@ -1,5 +1,5 @@
 {
-    "title": "TestWrite",
+    "title": "WriteReadTest",
     "funcGroups": [
         {
             "paths": ["b"],
@@ -12,6 +12,10 @@
         {
             "paths": [],
             "name": "c"
+        },
+        {
+            "paths": [],
+            "name": "d"
         }
     ]
 }
