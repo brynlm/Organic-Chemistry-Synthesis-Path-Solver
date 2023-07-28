@@ -81,7 +81,7 @@ public class SynthesisGraphApp {
     }
 
     // need to refactor to meet max line criteria
-//    @SuppressWarnings({"methodLength", "checkstyle:SuppressWarnings"})
+
     @SuppressWarnings("methodLength")
     private void doAddPaths() {
         int i;
