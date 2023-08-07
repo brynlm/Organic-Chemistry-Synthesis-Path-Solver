@@ -28,7 +28,8 @@ public class ProductsPane extends JPanel implements ActionListener {
         textField = new JTextField("Add new reaction product");
         textField.addActionListener(this);
 
-        nameField = new JTextField("nameField");
+        nameField = new JTextField("Reaction Pathways:");
+        nameField.setEditable(false);
 
         listModel = new DefaultListModel();
         listProducts = new JList(listModel);
@@ -36,8 +37,8 @@ public class ProductsPane extends JPanel implements ActionListener {
         listProducts.setLayoutOrientation(JList.VERTICAL);
 
         setLayout(new BorderLayout());
-        add(nameField, BorderLayout.NORTH);
-        add(textField, BorderLayout.PAGE_START);
+        add(nameField, BorderLayout.PAGE_START);
+        add(textField, BorderLayout.PAGE_END);
         add(listProducts, BorderLayout.CENTER);
     }
 
@@ -47,19 +48,20 @@ public class ProductsPane extends JPanel implements ActionListener {
 
     public void actionPerformed(ActionEvent ae) {
         String newPath = textField.getText();
-        String reactant = nameField.getText();
-        addNewProduct(newPath);
-//        gui.addNewPathway(reactant, newPath);
+        String reactant = nameField.getText().substring(15);
+//        addNewProduct(newPath);
+
         try {
             graph.getGroupByName(reactant).addPathway(newPath);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        setCurrentGroup(reactant); //so pane updates immediately
     }
 
     // Sets name field and list of pathways corresponding to group called from ReactionProductsManager
     public void setCurrentGroup(String name) {
-        nameField.setText(name);
+        nameField.setText("Pathways for : " + name);
         FunctionalGroup fg;
         try {
             fg = graph.getGroupByName(name);

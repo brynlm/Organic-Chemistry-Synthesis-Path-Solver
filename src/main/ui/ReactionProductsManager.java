@@ -17,39 +17,60 @@ public class ReactionProductsManager extends JPanel implements ActionListener {
 
     private SynthesisGraph graph;
 
-    private JTextField textField; // represents single reactant (instantiation will be automated later)
-    private JMenu reactants;
-    private JMenuBar menuBar;
+    private JTextField textField;
+    private JTextField titleField;
+    private JToolBar reactants;
+    private DefaultListModel listModel;
 
-    public ReactionProductsManager(SynthesisGraphGUI gui, ProductsPane productsPane) {
+    public ReactionProductsManager(SynthesisGraphGUI gui, ProductsPane productsPane, SynthesisGraph graph) {
         Dimension scrn = Toolkit.getDefaultToolkit().getScreenSize();
         this.gui = gui;
         this.productsPane = productsPane;
+        setLayout(new BorderLayout());
 
-        reactants = new JMenu("List of Reactants:");
+//        reactants = new JList();
 //        this.menuItem = new JMenuItem("Add New Group");
         textField = new JTextField("Add new Reactant");
         textField.addActionListener(this);
+        titleField = new JTextField("Reactants:");
+        titleField.setEditable(false);
 
-        menuBar = new JMenuBar();
+//        menuBar = new JMenuBar();
+        listModel = new DefaultListModel();
+//        listModel.addAll(graph.getGroups());
+//        reactants.setModel(listModel);
+        reactants = new JToolBar(JToolBar.VERTICAL);
+
+
+//        init();
 
 //        this.menuItem.setAction(new AddNewReactantAction("Add new reactant"));
-        reactants.add(textField);
+//        reactants.add(textField);
 
-        menuBar.add(reactants);
+//        menuBar.add(reactants);
 
 //        JMenu submenu = new JMenu("reactant 1");
 //        submenu.add(new JMenuItem("list of reaction products..."));
 //        reactants.add(submenu);
 
-        add(menuBar);
+        add(titleField, BorderLayout.PAGE_START);
+        add(reactants, BorderLayout.CENTER);
+        add(textField, BorderLayout.PAGE_END);
 
+    }
+
+    public void init() {
+//        listModel = new DefaultListModel();
+        for (FunctionalGroup g : graph.getGroups()) {
+            addNewGroup(g.getName());
+        }
+//        reactants.setModel(listModel);
     }
 
     // EFFECTS: adds new functional group to list of reactants.
     // need to add action to each newly added reactant, to list the reactants pathways
     public void addNewGroup(String name) {
-        JMenuItem newGroup = new JMenuItem(new SetPathwayViewAction(name, productsPane));
+        JButton newGroup = new JButton(new SetPathwayViewAction(name, productsPane));
         reactants.add(newGroup);
 
 

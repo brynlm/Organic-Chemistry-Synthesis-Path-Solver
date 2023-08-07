@@ -33,7 +33,7 @@ public class SynthesisGraphGUI extends JFrame implements ActionListener {
         graph = new SynthesisGraph("new_graph");
         mp = new MainMenuPanel();
         products = new ProductsPane(this.graph);
-        rxnMenu = new ReactionProductsManager(this, this.products);
+        rxnMenu = new ReactionProductsManager(this, this.products, this.graph);
 
         add(mp, BorderLayout.PAGE_START);
         add(rxnMenu, BorderLayout.LINE_START);
@@ -44,10 +44,6 @@ public class SynthesisGraphGUI extends JFrame implements ActionListener {
 
         centreOnScreen(); // place JFrame window at center of laptops screen
         setVisible(true); // overrides Component.setVisible() method
-
-    }
-
-    public void init() {
 
     }
 
