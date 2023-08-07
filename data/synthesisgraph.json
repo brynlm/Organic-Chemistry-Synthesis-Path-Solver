@@ -14,7 +14,7 @@
             "name": "c"
         },
         {
-            "paths": [],
+            "paths": ["c"],
             "name": "d"
         }
     ]

@@ -19,9 +19,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private JButton b4;
     private JButton testButton;
 
-    private JMenuItem menuItem; // represents single reactant (instantiation will be automated later)
-    private JMenu menu;
-    private JMenuBar menuBar;
     private SynthesisGraphGUI gui;
 
     public MainMenuPanel(SynthesisGraphGUI gui) {
@@ -36,10 +33,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         b4 = new JButton("Find Route");
         this.gui = gui;
 
-        testButton = new JButton("test Button");
-//        testButton.setLocation(50, 50);//I guess this is meant for custom layout only?
-//        testButton.setPreferredSize(new Dimension(20, 10));
-        add(testButton);
 
 
 //        menuBar = new JMenuBar();
@@ -50,6 +43,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 //        menu.setLocation((scrn.width - getWidth()) / 2, (scrn.height - getHeight()) / 2);
 
         b1.addActionListener(this);
+        b2.addActionListener(this);
         add(b1, BorderLayout.PAGE_START);
         add(b2,BorderLayout.PAGE_START);
         add(b3,BorderLayout.PAGE_START);
@@ -60,7 +54,12 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent ae) {
-        System.out.println("button worked!");
-        this.gui.loadGraph();
+        System.out.println(ae.getActionCommand());
+        String command = ae.getActionCommand();
+        if (command.equals("Load Graph Data")) {
+            this.gui.loadGraph();
+        } else if (command.equals("Save Graph")) {
+            this.gui.saveGraph();
+        }
     }
 }

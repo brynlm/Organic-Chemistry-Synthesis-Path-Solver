@@ -84,7 +84,7 @@ public class SynthesisGraphGUI extends JFrame implements ActionListener {
         setLocation((scrn.width - getWidth()) / 2, (scrn.height - getHeight()) / 2);
     }
 
-    private void saveGraph() {
+    public void saveGraph() {
         try {
             jsonWriter.open();
             jsonWriter.write(graph);
