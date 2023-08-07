@@ -152,6 +152,7 @@ public class SynthesisGraphApp {
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
         }
+
     }
 
 

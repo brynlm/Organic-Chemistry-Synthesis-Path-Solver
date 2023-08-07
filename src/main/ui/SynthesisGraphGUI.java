@@ -2,12 +2,16 @@ package ui;
 
 import model.FunctionalGroup;
 import model.SynthesisGraph;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.swing.*;
 
@@ -18,6 +22,9 @@ public class SynthesisGraphGUI extends JFrame implements ActionListener {
     private ProductsPane products;
 
     private JMenuItem addGroupButton;
+    private static final String JSON_STORE = "./data/synthesisgraph.json";
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
 
     public SynthesisGraphGUI() {
@@ -27,11 +34,14 @@ public class SynthesisGraphGUI extends JFrame implements ActionListener {
         setBackground(Color.WHITE);
         setLayout(new BorderLayout());
 
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
+
         addGroupButton = new JMenuItem("Add new reactant");
         addGroupButton.addActionListener(this);
 
         graph = new SynthesisGraph("new_graph");
-        mp = new MainMenuPanel();
+        mp = new MainMenuPanel(this);
         products = new ProductsPane(this.graph);
         rxnMenu = new ReactionProductsManager(this, this.products, this.graph);
 
@@ -72,6 +82,31 @@ public class SynthesisGraphGUI extends JFrame implements ActionListener {
     private void centreOnScreen() {
         Dimension scrn = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation((scrn.width - getWidth()) / 2, (scrn.height - getHeight()) / 2);
+    }
+
+    private void saveGraph() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(graph);
+            jsonWriter.close();
+            System.out.println("Saved " + graph.getTitle() + " to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads workroom from file
+    public void loadGraph() {
+        try {
+            graph = jsonReader.read();
+            System.out.println("Loaded " + graph.getTitle() + " from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
+        // update ProductsPane and ReactionProductsManager fields with new graph.
+        products.setGraph(graph);
+        rxnMenu.loadGraph(graph);
     }
 
     public static void main(String[] args) {

@@ -36,7 +36,7 @@ public class ReactionProductsManager extends JPanel implements ActionListener {
         titleField.setEditable(false);
 
 //        menuBar = new JMenuBar();
-        listModel = new DefaultListModel();
+//        listModel = new DefaultListModel();
 //        listModel.addAll(graph.getGroups());
 //        reactants.setModel(listModel);
         reactants = new JToolBar(JToolBar.VERTICAL);
@@ -57,6 +57,14 @@ public class ReactionProductsManager extends JPanel implements ActionListener {
         add(reactants, BorderLayout.CENTER);
         add(textField, BorderLayout.PAGE_END);
 
+    }
+
+    public void loadGraph(SynthesisGraph graph) {
+//        this.graph = graph;
+        reactants.removeAll();
+        for (FunctionalGroup g : graph.getGroups()) {
+            addNewGroup(g.getName());
+        }
     }
 
     public void init() {

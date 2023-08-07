@@ -22,8 +22,9 @@ public class MainMenuPanel extends JPanel implements ActionListener {
     private JMenuItem menuItem; // represents single reactant (instantiation will be automated later)
     private JMenu menu;
     private JMenuBar menuBar;
+    private SynthesisGraphGUI gui;
 
-    public MainMenuPanel() {
+    public MainMenuPanel(SynthesisGraphGUI gui) {
 //        setPreferredSize(new Dimension(50, 50));
         setSize(new Dimension(50, 50));
         setBackground(Color.BLACK);
@@ -33,6 +34,7 @@ public class MainMenuPanel extends JPanel implements ActionListener {
         b2 = new JButton("Save Graph");
         b3 = new JButton("Edit Graph"); // may not need this button
         b4 = new JButton("Find Route");
+        this.gui = gui;
 
         testButton = new JButton("test Button");
 //        testButton.setLocation(50, 50);//I guess this is meant for custom layout only?
@@ -59,5 +61,6 @@ public class MainMenuPanel extends JPanel implements ActionListener {
 
     public void actionPerformed(ActionEvent ae) {
         System.out.println("button worked!");
+        this.gui.loadGraph();
     }
 }

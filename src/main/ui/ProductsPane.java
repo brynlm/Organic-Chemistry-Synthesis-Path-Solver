@@ -42,6 +42,10 @@ public class ProductsPane extends JPanel implements ActionListener {
         add(listProducts, BorderLayout.CENTER);
     }
 
+    public void setGraph(SynthesisGraph graph) {
+        this.graph = graph;
+    }
+
     private void addNewProduct(String name) {
         listModel.addElement(name);
     }

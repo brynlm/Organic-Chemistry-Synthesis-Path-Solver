@@ -15,7 +15,7 @@ public class SetPathwayViewAction extends AbstractAction {
     public void actionPerformed(ActionEvent ae) {
         String name = ae.getActionCommand();
         //test
-        System.out.println(name);
+//        System.out.println(name);
 
         productsPane.setCurrentGroup(name);
     }
