@@ -1,5 +1,8 @@
 package ui;
 
+import model.FunctionalGroup;
+import model.SynthesisGraph;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,17 +12,13 @@ import java.awt.event.KeyEvent;
 import javax.swing.*;
 
 public class SynthesisGraphGUI extends JFrame implements ActionListener {
-    private JButton b1;
-    private JButton b2;
-    private JButton b3;
-    private JButton b4;
-
+    private SynthesisGraph graph;
     private ReactionProductsManager rxnMenu;
-
     private MainMenuPanel mp;
-    private JMenu reactants;
-    private JMenuBar menuBar;
-    private JMenuItem menuItem;
+    private ProductsPane products;
+
+    private JMenuItem addGroupButton;
+
 
     public SynthesisGraphGUI() {
         super("Synthesis Graph");
@@ -28,43 +27,17 @@ public class SynthesisGraphGUI extends JFrame implements ActionListener {
         setBackground(Color.WHITE);
         setLayout(new BorderLayout());
 
-//        JButton testButton = new JButton("test button");
-//        testButton.setLocation(50, 50);
-//        add(testButton);
+        addGroupButton = new JMenuItem("Add new reactant");
+        addGroupButton.addActionListener(this);
 
-//        b1 = new JButton("Load Graph Data");
-//        b2 = new JButton("Save Graph");
-//        b3 = new JButton("Edit Graph"); // may not need this button
-//        b4 = new JButton("Find Route");
-//        b1.addActionListener(this);
-//        add(b1);
-//        add(b2);
-//        add(b3);
-//        add(b4);
-
+        graph = new SynthesisGraph("new_graph");
         mp = new MainMenuPanel();
-        rxnMenu = new ReactionProductsManager();
+        products = new ProductsPane(this.graph);
+        rxnMenu = new ReactionProductsManager(this, this.products);
+
         add(mp, BorderLayout.PAGE_START);
-//        add(rxnMenu);
-//        rxnMenu.setVisible(false);
-
-//        menuBar = new JMenuBar();
-//        reactants = new JMenu("List of Reactants:");
-//        menuItem = new JMenuItem("Test JMenuItem?");
-//        reactants.add(menuItem);
-//        menuBar.add(reactants);
-////
-//        menuBar.setSize(10, 10);
-//        menuBar.setLocation(50,50);
-////        menuBar.add(b1);
-////        menuBar.add(b2);
-////        menuBar.add(b3);
-////        menuBar.add(b4);
-////        menuBar.setBackground(Color.BLACK);
-//        add(menuBar);
-//        setJMenuBar(menuBar);
-
-//        menuBar.setBackground(Color.BLACK);
+        add(rxnMenu, BorderLayout.LINE_START);
+        add(products, BorderLayout.LINE_END);
 
         Dimension scrn = Toolkit.getDefaultToolkit().getScreenSize();
         setMinimumSize(new Dimension(scrn.width / 2, scrn.height / 2));
@@ -74,8 +47,30 @@ public class SynthesisGraphGUI extends JFrame implements ActionListener {
 
     }
 
+    public void init() {
+
+    }
+
+    // EFFECTS: creates and adds new functional group to this.group. Method is called from rxnMenu.
+    public void addNewGroup(String name) {
+        this.graph.addGroup(new FunctionalGroup(name));
+    }
+
+    public void addNewPathway(String reactant, String newPath) {
+        FunctionalGroup group;
+        try {
+            group = graph.getGroupByName(reactant);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        group.addPathway(newPath);
+    }
+
+
     public void actionPerformed(ActionEvent ae) {
-        ;//stub
+//        FunctionalGroup newGroup = new FunctionalGroup("test name");
+//        graph.addGroup(newGroup);
+//        rxnMenu.addNewGroup(newGroup.getName());
     }
 
     private void centreOnScreen() {
