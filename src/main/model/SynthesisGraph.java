@@ -146,9 +146,10 @@ public class SynthesisGraph {
     // REQUIRES: a different FunctionalGroup object with the same name was NOT added previously
     //           (FunctionalGroups with same name are not allowed).
     // MODIFIES: this
-    // EFFECTS: adds functional group to funcGroups list.
+    // EFFECTS: adds functional group to funcGroups list + logs event.
     public void addGroup(FunctionalGroup f) {
         this.funcGroups.add(f);
+        EventLog.getInstance().logEvent(new Event("New functional group created: " + f.getName()));
     }
 
     public List<FunctionalGroup> getGroups() {
@@ -157,6 +158,7 @@ public class SynthesisGraph {
 
     public void setTitle(String title) {
         this.title = title;
+        EventLog.getInstance().logEvent(new Event("Title has been changed: " + this.title));
     }
 
     public String getTitle() {

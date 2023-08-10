@@ -1,21 +1,20 @@
 package ui;
 
+import model.EventLog;
+import model.Event;
 import model.FunctionalGroup;
 import model.SynthesisGraph;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.swing.*;
 
-public class SynthesisGraphGUI extends JFrame implements ActionListener {
+public class SynthesisGraphGUI extends JFrame implements ActionListener, WindowListener {
     private SynthesisGraph graph;
     private ReactionProductsManager rxnMenu;
     private MainMenuPanel mp;
@@ -54,6 +53,8 @@ public class SynthesisGraphGUI extends JFrame implements ActionListener {
 
         centreOnScreen(); // place JFrame window at center of laptops screen
         setVisible(true); // overrides Component.setVisible() method
+
+        addWindowListener(this);
 
     }
 
@@ -108,6 +109,43 @@ public class SynthesisGraphGUI extends JFrame implements ActionListener {
         products.setGraph(graph);
         rxnMenu.loadGraph(graph);
     }
+
+    public void windowClosed(WindowEvent e) {
+        EventLog el = EventLog.getInstance();
+        for (Event next: el) {
+            System.out.println(next.toString());
+        }
+    }
+
+    public void windowClosing(WindowEvent e) {
+//        System.out.println("WindowListener method called: windowClosing");
+        EventLog el = EventLog.getInstance();
+        for (Event next: el) {
+            System.out.println(next.toString());
+        }
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+        System.out.println("Application opened");
+    }
+
+    public void windowIconified(WindowEvent e) {
+        System.out.println("WindowListener method called: windowIconified.");
+    }
+
+    public void windowDeiconified(WindowEvent e) {
+        System.out.println("WindowListener method called: windowDeiconified.");
+    }
+
+    public void windowActivated(WindowEvent e) {
+        System.out.println("WindowListener method called: windowActivated.");
+    }
+
+    public void windowDeactivated(WindowEvent e) {
+        System.out.println("WindowListener method called: windowDeactivated.");
+    }
+
 
     public static void main(String[] args) {
         new SynthesisGraphGUI();

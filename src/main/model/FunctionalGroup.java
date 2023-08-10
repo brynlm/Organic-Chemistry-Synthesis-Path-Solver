@@ -30,6 +30,8 @@ public class FunctionalGroup {
     // EFFECTS: adds reaction product to list of potential pathways
     public void addPathway(String product) {
         this.pathways.add(product);
+        EventLog.getInstance().logEvent(new Event("New pathway added: " + this.name
+                + " -> " + product));
     }
 
     public JSONObject toJson() {
