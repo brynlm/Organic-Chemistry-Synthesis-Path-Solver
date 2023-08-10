@@ -34,3 +34,21 @@ As a user, I want to be able to:
 - View graphical data such as child nodes of a specific chemical group.
 - have the option of *saving* added graph data to file
 - have the option of *loading* graph data from file and resume at a later time
+
+## Phase 4: Task 2
+Thu Aug 10 15:23:26 PDT 2023  
+New functional group created: a  
+Thu Aug 10 15:23:29 PDT 2023  
+New functional group created: b  
+Thu Aug 10 15:23:29 PDT 2023   
+New functional group created:   
+Thu Aug 10 15:23:30 PDT 2023   
+New functional group created: c   
+Thu Aug 10 15:23:41 PDT 2023    
+New pathway added: a -> b     
+Thu Aug 10 15:23:46 PDT 2023    
+New pathway added: b -> c    
+Thu Aug 10 15:23:52 PDT 2023   
+New pathway added: c -> a   
+  
+Process finished with exit code 0
