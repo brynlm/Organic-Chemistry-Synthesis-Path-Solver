@@ -52,3 +52,6 @@ Thu Aug 10 15:23:52 PDT 2023
 New pathway added: c -> a   
   
 Process finished with exit code 0
+
+## Phase 4: Task 3
+Having viewed the UML class diagram, I think the program could be improved by making the association between the SynthesisGraphGUI and ProductsPane bi-directional in the same way that MainMenuPanel and ReactionProductsManager are associated. For the sake of preserving modularity, the latter two classes influence the SynthesisGraph class indirectly by calling methods from the main GUI class, through the bi-directional association. For the sake of time, I had the ProductsPane "inherit" the SynthesisGraph object instantiated by the associated SynthesisGraphGUI classes' constructor, creating two references to the same object. This works fine as well, but could be troublesome when making future changes to the program. 
