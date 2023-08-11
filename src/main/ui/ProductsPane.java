@@ -17,7 +17,6 @@ import javax.swing.text.JTextComponent;
 public class ProductsPane extends JPanel implements ActionListener {
     private JTextField textField;
     private JList listProducts;
-    private SynthesisGraphGUI gui;
     private JTextField nameField;
     private DefaultListModel listModel;
     private SynthesisGraph graph;

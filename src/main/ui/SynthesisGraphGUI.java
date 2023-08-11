@@ -42,7 +42,7 @@ public class SynthesisGraphGUI extends JFrame implements ActionListener, WindowL
         graph = new SynthesisGraph("new_graph");
         mp = new MainMenuPanel(this);
         products = new ProductsPane(this.graph);
-        rxnMenu = new ReactionProductsManager(this, this.products, this.graph);
+        rxnMenu = new ReactionProductsManager(this, this.products);
 
         add(mp, BorderLayout.PAGE_START);
         add(rxnMenu, BorderLayout.LINE_START);

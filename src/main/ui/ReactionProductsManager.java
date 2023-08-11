@@ -14,15 +14,12 @@ import javax.swing.*;
 public class ReactionProductsManager extends JPanel implements ActionListener {
     private SynthesisGraphGUI gui;
     private ProductsPane productsPane;
-
-    private SynthesisGraph graph;
-
     private JTextField textField;
     private JTextField titleField;
     private JToolBar reactants;
     private DefaultListModel listModel;
 
-    public ReactionProductsManager(SynthesisGraphGUI gui, ProductsPane productsPane, SynthesisGraph graph) {
+    public ReactionProductsManager(SynthesisGraphGUI gui, ProductsPane productsPane) {
         Dimension scrn = Toolkit.getDefaultToolkit().getScreenSize();
         this.gui = gui;
         this.productsPane = productsPane;
@@ -67,13 +64,6 @@ public class ReactionProductsManager extends JPanel implements ActionListener {
         }
     }
 
-    public void init() {
-//        listModel = new DefaultListModel();
-        for (FunctionalGroup g : graph.getGroups()) {
-            addNewGroup(g.getName());
-        }
-//        reactants.setModel(listModel);
-    }
 
     // EFFECTS: adds new functional group to list of reactants.
     // need to add action to each newly added reactant, to list the reactants pathways
